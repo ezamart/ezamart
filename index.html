@@ -27,11 +27,11 @@
         .logo { 
             font-size: 26px; 
             font-weight: bold; 
-            color: #4A90E2; /* Biru lembut tepercaya */
+            color: #4A90E2; 
             text-decoration: none;
         }
         .logo span { 
-            color: #FF6B8B; /* Pink pastel hangat */
+            color: #FF6B8B; 
         }
         
         /* Kotak Pencarian */
@@ -66,7 +66,7 @@
 
         /* Menu Navigasi Kategori */
         .navbar { 
-            background-color: #FFF0F2; /* Latar pink sangat muda */
+            background-color: #FFF0F2; 
             text-align: center; 
             padding: 12px; 
         }
@@ -173,21 +173,31 @@
         .buy-btn:hover {
             background-color: #357ABD;
         }
+
+        /* Desain Pesan Cantik Jika Produk Tidak Ditemukan */
+        .not-found-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 16px;
+            color: #666;
+            background-color: #FFF5F6;
+            border-radius: 10px;
+            border: 1px dashed #FFD3DB;
+        }
     </style>
 </head>
 <body>
 
-    <!-- BARIS 1: Header Atas -->
     <div class="header-container">
         <a href="#" class="logo">Eza<span>Mart</span></a>
         <div class="search-bar">
-            <input type="text" placeholder="Cari kebutuhan si kecil di sini...">
-            <button>Cari</button>
+            <input type="text" id="search-input" placeholder="Cari kebutuhan si kecil di sini...">
+            <button id="search-button">Cari</button>
         </div>
         <div class="header-icons">🛒 👤</div>
     </div>
 
-    <!-- BARIS 2: Menu Navigasi Kategori -->
     <div class="navbar">
         <a href="#">HOME</a>
         <a href="#">KEBUTUHAN BAYI</a>
@@ -196,14 +206,12 @@
         <a href="#">PERAWATAN IBU</a>
     </div>
 
-    <!-- BARIS 3: Area Produk Jualan -->
     <div class="product-section">
         <h2 class="section-title">Eza Rekomendasi Ibu & Anak</h2>
         <p class="section-subtitle">Produk pilihan terbaik dengan harga promo khusus hari ini.</p>
         
-        <div class="product-grid">
+        <div class="product-grid" id="product-grid">
             
-            <!-- CONTOH PRODUK 1: Kebutuhan Bayi -->
             <div class="product-card">
                 <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=400" alt="Popok Bayi Premium">
                 <div>
@@ -215,12 +223,10 @@
                         <div class="old-price">Rp 99.000</div>
                         <div class="new-price">Rp 74.500</div>
                     </div>
-                    <!-- GANTI GANTI LINK DI BAWAH INI DENGAN LINK SHOPEE AFFILIATEMU NANTI -->
                     <a href="https://shopee.co.id" target="_blank" class="buy-btn">Beli Sekarang</a>
                 </div>
             </div>
 
-            <!-- CONTOH PRODUK 2: Pakaian Anak -->
             <div class="product-card">
                 <img src="https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=400" alt="Baju Anak">
                 <div>
@@ -236,7 +242,6 @@
                 </div>
             </div>
 
-            <!-- CONTOH PRODUK 3: Mainan Edukasi -->
             <div class="product-card">
                 <img src="https://images.unsplash.com/photo-1515488042361-404e9250afef?w=400" alt="Mainan Edukasi">
                 <div>
@@ -254,6 +259,42 @@
 
         </div>
     </div>
+
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const productGrid = document.getElementById('product-grid');
+        const productCards = document.querySelectorAll('.product-card');
+
+        function jalankanPencarian() {
+            const kataKunci = searchInput.value.toLowerCase().trim();
+            let produkDitemukan = 0;
+
+            const pesanLama = document.querySelector('.not-found-message');
+            if (pesanLama) pesanLama.remove();
+
+            productCards.forEach(card => {
+                const namaProduk = card.querySelector('.product-title').textContent.toLowerCase();
+                
+                if (namaProduk.includes(kataKunci)) {
+                    card.style.display = 'flex';
+                    produkDitemukan++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (produkDitemukan === 0) {
+                const pesanKosong = document.createElement('div');
+                pesanKosong.className = 'not-found-message';
+                pesanKosong.innerHTML = 'Duh, produk yang Bunda cari belum tersedia nih.. 😢<br><small>Coba ketik kata kunci lain seperti "baju", "popok", atau "mainan" ya!</small>';
+                productGrid.appendChild(pesanKosong);
+            }
+        }
+
+        searchButton.addEventListener('click', jalankanPencarian);
+        searchInput.addEventListener('input', jalankanPencarian);
+    </script>
 
 </body>
 </html>
